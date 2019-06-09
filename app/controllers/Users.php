@@ -111,6 +111,9 @@
         // Validate Email
         if(empty($data['email'])){
           $data['email_err'] = 'Pleae enter email';
+        // Check for user/email
+        }elseif(!$this->userModel->findUserByEmail($data['email'])){
+            $data['email_err'] = 'No user found';
         }
 
         // Validate Password
@@ -118,13 +121,6 @@
           $data['password_err'] = 'Please enter password';
         }
 
-        // Check for user/email
-        if($this->userModel->findUserByEmail($data['email'])){
-          // User found
-        } else {
-          // User not found
-          $data['email_err'] = 'No user found';
-        }
 
         // Make sure errors are empty
         if(empty($data['email_err']) && empty($data['password_err'])){
