@@ -33,3 +33,20 @@
       return false;
     }
   }
+  function csrf_token_Generate(){
+      if (empty($_SESSION['token'])) {
+          $_SESSION['token'] = bin2hex(random_bytes(32));
+      }
+      return $_SESSION['token'];
+  }
+  function csrf_token_check($token_post){
+      if ($token_post) {
+          if (hash_equals($_SESSION['token'], $token_post)) {
+              return true;
+          } else {
+              return false;
+          }
+      }else{
+          return false;
+      }
+  }

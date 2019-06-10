@@ -97,6 +97,11 @@
       // Check for POST
       if($_SERVER['REQUEST_METHOD'] == 'POST'){
         // Process form
+          
+          if(!csrf_token_check($_POST['token'])){
+              die('CSRF Token Problem');
+          }
+
         // Sanitize POST data
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
         
@@ -104,8 +109,10 @@
         $data =[
           'email' => trim($_POST['email']),
           'password' => trim($_POST['password']),
+          'token'=>$_POST['token'],
           'email_err' => '',
-          'password_err' => '',      
+          'password_err' => '',
+          'token_err' => '',
         ];
 
         // Validate Email
@@ -143,12 +150,15 @@
 
 
       } else {
+          $token=csrf_token_Generate();
         // Init data
         $data =[    
           'email' => '',
           'password' => '',
+          'token'=>$token,
           'email_err' => '',
           'password_err' => '',        
+          'token_err' => '',
         ];
 
         // Load view
